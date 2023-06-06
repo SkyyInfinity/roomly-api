@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Throwable;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -33,6 +34,13 @@ class Handler extends ExceptionHandler
                     "message" => "La ressource est introuvable."
                 ], 404);
             }
+        });
+
+        $this->renderable(function (UnauthorizedHttpException $e, $request) {
+            // Return 401 error response in JSON format
+            return response()->json([
+                "message" => "Vous n'avez pas les droits pour accéder à cette ressource."
+            ], 401);
         });
     }
 }

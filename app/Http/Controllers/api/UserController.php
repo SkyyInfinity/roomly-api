@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserStoreRequest;
 use App\Models\User;
@@ -14,7 +15,6 @@ class UserController extends Controller
      */
     public function index()
     {
-        // Get all users
         $users = User::all();
 
         if(count($users) === 0) {
@@ -33,10 +33,11 @@ class UserController extends Controller
     {
         // Store a new user
         $user = User::create([
-            'firstName' => ucfirst($request->firstName),
-            'lastName' => ucfirst($request->lastName),
+            'first_name' => ucfirst($request->first_name),
+            'last_name' => ucfirst($request->last_name),
             'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
+            'roles' => json_encode(['user'])
         ]);
 
         return response()->json($user);
@@ -57,8 +58,8 @@ class UserController extends Controller
     {
         // Update an user
         $user->update([
-            'firstName' => $request->firstName,
-            'lastName' => $request->lastName,
+            'first_name' => $request->firstName,
+            'last_name' => $request->lastName,
             'password' => Hash::make($request->password)
         ]);
 

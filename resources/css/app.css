@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  /* .grid-admin-layout {
+    @apply bg-blue-500 text-white font-bold py-2 px-4 rounded;
+  } */
+}
+
+*, 
+*:before, 
+*:after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #333;
+}
+
+.grid-admin-layout {
+    grid-template-areas: "sidebar header header" "sidebar main main" "footer footer footer";
+    grid-template-columns: 300px 1fr 1fr;
+    grid-template-rows: auto 1fr auto;
+}
+#l-header {
+    grid-area: header;
+}
+
+#l-sidebar {
+    grid-area: sidebar;
+}
+
+#l-main {
+    grid-area: main;
+}
+
+#l-footer {
+    grid-area: footer;
+}

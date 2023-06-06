@@ -1,9 +1,9 @@
-@extends('layouts.home')
+@extends('layouts.app')
  
-@section('title', 'Accueil')
+@section('title', 'Dashboard')
  
 @section('content')
     <div class="container mx-auto">
-        Home
+        Dashboard
     </div>
 @endsection

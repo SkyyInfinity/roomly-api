@@ -24,8 +24,8 @@ class UserStoreRequest extends FormRequest
         $user_id = $this->user->id ?? null;
 
         return [
-            'firstName' => 'required|string|max:100',
-            'lastName' => 'required|string|max:100',
+            'first_name' => 'required|string|max:100',
+            'last_name' => 'required|string|max:100',
             'email' => 'required|unique:users'.(isset($user_id) ? ',email,'.$user_id : ''),
             'password' => 'required|min:8|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/'
         ];
