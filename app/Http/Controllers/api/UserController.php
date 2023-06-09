@@ -40,15 +40,18 @@ class UserController extends Controller
             'roles' => json_encode(['user'])
         ]);
 
-        return response()->json($user);
+        return response()->json([
+            'message' => 'L\'utilisateur a été créé avec succès.',
+            'user' => $user
+        ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show(string $id)
     {
-        return response()->json($user);
+        return response()->json(User::findOrFail($id));
     }
 
     /**
@@ -63,15 +66,19 @@ class UserController extends Controller
             'password' => Hash::make($request->password)
         ]);
 
-        return response()->json($user);
+        return response()->json([
+            'message' => 'L\'utilisateur a été mis à jour avec succès.',
+            'user' => $user
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(string $id)
     {
         // Delete an user
+        $user = User::findOrFail($id);
         $user->delete();
 
         return response()->json([
