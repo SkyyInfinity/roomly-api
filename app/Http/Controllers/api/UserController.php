@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\api;
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\UserStoreRequest;
 use App\Models\User;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\UserStoreRequest;
+use App\Http\Controllers\AuthController;
 
 class UserController extends Controller
 {
@@ -15,7 +16,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = User::all(['id', 'first_name', 'last_name', 'email', 'roles', 'created_at', 'updated_at']);
 
         if(count($users) === 0) {
             return response()->json([
@@ -57,13 +58,13 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UserStoreRequest $request, User $user)
+    public function update(Request $request, User $user)
     {
         // Update an user
         $user->update([
-            'first_name' => $request->firstName,
-            'last_name' => $request->lastName,
-            'password' => Hash::make($request->password)
+            'first_name' => $request->first_name ? $request->first_name : $user->first_name,
+            'last_name' => $request->last_name ? $request->last_name : $user->last_name,
+            'password' => $request->password ? Hash::make($request->password) : $user->password,
         ]);
 
         return response()->json([
@@ -75,8 +76,14 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
+        if(in_array('admin', json_decode($request->user()->roles)) === false) {
+            return response()->json([
+                'message' => 'Vous n\'avez pas les droits pour accéder à cette ressource.'
+            ]);
+        }
+
         // Delete an user
         $user = User::findOrFail($id);
         $user->delete();

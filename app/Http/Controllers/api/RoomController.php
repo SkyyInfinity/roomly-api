@@ -30,6 +30,12 @@ class RoomController extends Controller
      */
     public function store(RoomStoreRequest $request)
     {
+        if(in_array('admin', json_decode($request->user()->roles)) === false) {
+            return response()->json([
+                'message' => 'Vous n\'avez pas les droits pour accéder à cette ressource.'
+            ]);
+        }
+
         // Store a new room
         $room = Room::create([
             'name' => ucfirst($request->name),
@@ -56,19 +62,25 @@ class RoomController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Room $room)
     {
+        if(in_array('admin', json_decode($request->user()->roles)) === false) {
+            return response()->json([
+                'message' => 'Vous n\'avez pas les droits pour accéder à cette ressource.'
+            ]);
+        }
+        
         // Store a new room
-        $room = Room::create([
-            'name' => ucfirst($request->name),
-            'description' => ucfirst($request->description),
-            'image' => $request->image,
-            'pin' => $request->is_reserved || null,
-            'is_reserved' => $request->is_reserved || false
+        $room->update([
+            'name' => $request->name ? ucfirst($request->name) : $room->name,
+            'description' => $request->description ? ucfirst($request->description) : $room->description,
+            'image' => $request->image ? $request->image : $room->image,
+            'pin' => $request->is_reserved ? $request->is_reserved : $room->pin,
+            'is_reserved' => $request->is_reserved ? $request->is_reserved : $room->is_reserved
         ]);
 
         return response()->json([
-            'message' => 'La salle a été créée avec succès.',
+            'message' => 'La salle a été mise à jour avec succès.',
             'room' => $room
         ]);
     }
@@ -76,8 +88,14 @@ class RoomController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
+        if(in_array('admin', json_decode($request->user()->roles)) === false) {
+            return response()->json([
+                'message' => 'Vous n\'avez pas les droits pour accéder à cette ressource.'
+            ]);
+        }
+
         // Delete an user
         $room = Room::findOrFail($id);
         $room->delete();

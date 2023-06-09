@@ -74,14 +74,14 @@ class ReservationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(ReservationStoreRequest $request, Reservation $reservation)
+    public function update(Request $request, Reservation $reservation)
     {
         $reservation->update([
-            'user' => $request->user,
-            'room' => $request->room,
-            'status' => $request->status,
-            'start_at' => $request->start_at,
-            'end_at' => $request->end_at
+            'user' => $request->user ? $request->user : $reservation->user,
+            'room' => $request->room ? $request->room : $reservation->room,
+            'status' => $request->status ? $request->status : $reservation->status,
+            'start_at' => $request->start_at ? $request->start_at : $reservation->start_at,
+            'end_at' => $request->end_at ? $request->end_at : $reservation->end_at
         ]);
 
         return response()->json([
@@ -93,8 +93,14 @@ class ReservationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
+        if(in_array('admin', json_decode($request->user()->roles)) === false) {
+            return response()->json([
+                'message' => 'Vous n\'avez pas les droits pour accéder à cette ressource.'
+            ]);
+        }
+
         $reservation = Reservation::findOrFail($id);
         $reservation->delete();
 
