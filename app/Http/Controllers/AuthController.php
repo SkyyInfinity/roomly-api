@@ -12,11 +12,6 @@ class AuthController extends Controller
         $credentials = $request->only(['email', 'password']);
 
         if(!$token = auth()->attempt($credentials)) {
-            // Store token in database in remember_token column
-            $user = User::where('email', $request->email)->first();
-            $user->update([
-                'remember_token' => $token
-            ]);
             
             return response()->json([
                 'message' => 'Identifiants invalides.'

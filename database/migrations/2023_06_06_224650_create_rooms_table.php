@@ -11,10 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Schema::create('rooms', function (Blueprint $table) {
-        //     $table->id();
-        //     $table->timestamps();
-        // });
+        Schema::create('rooms', function (Blueprint $table) {
+            $table->id();
+            $table->string('name', 100);
+            $table->text('description');
+            $table->string('image', 255);
+            $table->integer('pin')->nullable();
+            $table->boolean('is_reserved')->default(false);
+            $table->timestamps();
+        });
     }
 
     /**

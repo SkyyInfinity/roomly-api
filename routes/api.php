@@ -1,9 +1,11 @@
 <?php
 
-use App\Http\Controllers\api\UserController;
-use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\api\RoomController;
+use App\Http\Controllers\api\UserController;
+use App\Http\Controllers\api\ReservationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,4 +32,6 @@ Route::group(['middleware' => ['jwt.auth']], function() {
 
     // Ressources routes
     Route::apiResource('users', UserController::class, ['except' => ['store']]);
+    Route::apiResource('rooms', RoomController::class);
+    Route::apiResource('reservations', ReservationController::class);
 });

@@ -8,4 +8,21 @@ use Illuminate\Database\Eloquent\Model;
 class Room extends Model
 {
     use HasFactory;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'name',
+        'description',
+        'image',
+        'pin',
+    ];
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class)->using(Reservation::class);
+    }
 }
