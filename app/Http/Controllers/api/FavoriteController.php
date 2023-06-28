@@ -23,15 +23,20 @@ class FavoriteController extends Controller
                 'message' => 'Aucun favoris n\'a été trouvée pour cet utilisateur.'
             ]);
         }
+
+        $realFavorites = [];
+
         foreach($favorites as $favorite) {
             $user = User::findOrFail($favorite->user_id);
             $room = Room::findOrFail($favorite->room_id);
 
             $favorite->user = $user;
             $favorite->room = $room;
+            
+            array_push($realFavorites, $favorite);
         }
 
-        return response()->json($favorites);
+        return response()->json($realFavorites);
     }
 
     /**
