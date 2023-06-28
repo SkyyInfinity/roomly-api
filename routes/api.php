@@ -34,7 +34,8 @@ Route::group(['middleware' => ['jwt.auth']], function() {
     
     // Ressources routes
     Route::apiResource('users', UserController::class, ['except' => ['store']]);
-    Route::apiResource('rooms', RoomController::class);
+    Route::apiResource('rooms', RoomController::class, ['except' => ['getAllWithFavorites']]);
+    Route::get('rooms-with-favorites/{id?}', [RoomController::class, 'getAllWithFavorites']);
     Route::apiResource('reservations', ReservationController::class);
     Route::get('user-reservations/{id}', [ReservationController::class, 'getByUser']);
     Route::get('favorites/{id}', [FavoriteController::class, 'index']);
