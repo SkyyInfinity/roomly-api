@@ -89,14 +89,8 @@ class FavoriteController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request, string $id)
+    public function destroy(string $id)
     {
-        if(in_array('admin', json_decode($request->user()->roles)) === false) {
-            return response()->json([
-                'message' => 'Vous n\'avez pas les droits pour accéder à cette ressource.'
-            ]);
-        }
-
         $favorite = Favorite::findOrFail($id);
         $favorite->delete();
 

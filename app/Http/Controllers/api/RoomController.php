@@ -46,6 +46,7 @@ class RoomController extends Controller
                 foreach($favorites as $favorite) {
                     if($room->id === $favorite->room_id) {
                         $room->is_favorite = true;
+                        $room->favorite_id = $favorite->id;
                     }
                 }
             }
