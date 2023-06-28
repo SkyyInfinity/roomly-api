@@ -19,9 +19,8 @@ class RoomFactory extends Factory
         return [
             'name' => 'Salle ' . fake()->city(),
             'description' => fake()->text(),
-            // Get root url of the app
-            'image' => 'https://wonderful-lamarr.139-99-210-151.plesk.page/images/room.jpg',
-            'pin' => fake()->numberBetween(0, 50),
+            'image' => 'https://wonderful-lamarr.139-99-210-151.plesk.page/images/room.webp',
+            'pin' => fake()->numberBetween(1, 50),
             'is_reserved' => fake()->boolean(0),
         ];
     }

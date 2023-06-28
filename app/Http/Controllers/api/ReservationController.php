@@ -36,6 +36,35 @@ class ReservationController extends Controller
     }
 
     /**
+     * Display a listing of the resource by user.
+     */
+    public function getByUser(string|int $id)
+    {
+        $user = User::findOrFail($id);
+        $reservations = Reservation::all()->where('user', $user->id);
+
+        if(count($reservations) === 0) {
+            return response()->json([
+                'message' => 'Aucune réservation n\'a été trouvée.'
+            ]);
+        }
+
+        $realReservations = [];
+
+        foreach($reservations as $reservation) {
+            $user = User::findOrFail($reservation->user);
+            $room = Room::findOrFail($reservation->room);
+
+            $reservation->user = $user;
+            $reservation->room = $room;
+
+            array_push($realReservations, $reservation);
+        }
+
+        return response()->json($realReservations);
+    } 
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(ReservationStoreRequest $request)
