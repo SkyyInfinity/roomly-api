@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\api\RoomController;
 use App\Http\Controllers\api\UserController;
+use App\Http\Controllers\api\FavoriteController;
 use App\Http\Controllers\api\ReservationController;
 
 /*
@@ -26,12 +27,15 @@ Route::post('login', [AuthController::class, 'login']);
 
 Route::post('users', [UserController::class, 'store']);
 
+
 Route::group(['middleware' => ['jwt.auth']], function() {
     // Auth routes
     Route::post('logout', [AuthController::class, 'logout']);
-
+    
     // Ressources routes
     Route::apiResource('users', UserController::class, ['except' => ['store']]);
     Route::apiResource('rooms', RoomController::class);
     Route::apiResource('reservations', ReservationController::class);
+    Route::get('favorites/{id}', [FavoriteController::class, 'index']);
+    Route::apiResource('favorites', FavoriteController::class, ['except' => ['index']]);
 });

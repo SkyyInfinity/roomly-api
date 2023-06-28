@@ -60,4 +60,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->belongsToMany(Room::class)->using(Reservation::class);
     }
+
+    public function favoriteRooms()
+    {
+         return $this->belongsToMany(Room::class)->using(Favorite::class);
+    }
 }
