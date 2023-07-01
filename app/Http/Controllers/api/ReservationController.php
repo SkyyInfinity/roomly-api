@@ -75,8 +75,8 @@ class ReservationController extends Controller
         $reservation = Reservation::create([
             'user' => $user->id,
             'room' => $room->id,
-            'start_at' => $request->start_at,
-            'end_at' => $request->end_at
+            'start_at' => new \DateTime($request->start_at),
+            'end_at' => new \DateTime($request->end_at)
         ]);
 
         return response()->json([
