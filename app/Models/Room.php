@@ -19,6 +19,7 @@ class Room extends Model
         'description',
         'image',
         'pin',
+        'is_reserved'
     ];
 
     public function users()

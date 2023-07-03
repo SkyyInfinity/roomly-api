@@ -79,6 +79,12 @@ class ReservationController extends Controller
             'end_at' => new \DateTime($request->end_at)
         ]);
 
+        if($reservation) {
+            $room->update([
+                'is_reserved' => true
+            ]);
+        }
+
         return response()->json([
             'message' => 'La réservation a été créée avec succès.',
             'reservation' => [
@@ -131,6 +137,12 @@ class ReservationController extends Controller
         }
 
         $reservation = Reservation::findOrFail($id);
+        $room = Room::findOrFail($reservation->room);
+        if($reservation) {
+            $room->update([
+                'is_reserved' => true
+            ]);
+        }
         $reservation->delete();
 
         return response()->json([
