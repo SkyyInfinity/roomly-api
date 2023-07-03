@@ -130,17 +130,11 @@ class ReservationController extends Controller
      */
     public function destroy(Request $request, string $id)
     {
-        if(in_array('admin', json_decode($request->user()->roles)) === false) {
-            return response()->json([
-                'message' => 'Vous n\'avez pas les droits pour accéder à cette ressource.'
-            ]);
-        }
-
         $reservation = Reservation::findOrFail($id);
         $room = Room::findOrFail($reservation->room);
         if($reservation) {
             $room->update([
-                'is_reserved' => true
+                'is_reserved' => false
             ]);
         }
         $reservation->delete();
