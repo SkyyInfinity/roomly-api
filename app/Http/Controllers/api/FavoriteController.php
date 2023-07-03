@@ -47,10 +47,7 @@ class FavoriteController extends Controller
         $user = User::findOrFail($request->user_id);
         $room = Room::findOrFail($request->room_id);
 
-        $already = Favorite::all()->where([
-            ["user_id", "=", $user->id],
-            ["room_id", "=", $room->id]
-        ]);
+        $already = Favorite::all()->where("user_id", $user->id)->where("room_id", $room->id);
 
         if($already->count() > 0) {
             return response()->json([
