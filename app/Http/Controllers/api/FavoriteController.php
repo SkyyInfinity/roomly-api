@@ -50,9 +50,9 @@ class FavoriteController extends Controller
         $already = Favorite::all()->where([
             ["user_id", "=", $user->id],
             ["room_id", "=", $room->id]
-        ])->firstOrFail();
+        ]);
 
-        if($already) {
+        if(count($already) > 0) {
             return response()->json([
                 'message' => 'Cette salle à déjà été ajoutée aux favoris.'
             ], 400);
