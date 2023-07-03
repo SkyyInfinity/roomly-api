@@ -21,7 +21,7 @@ class FavoriteController extends Controller
         if(count($favorites) === 0) {
             return response()->json([
                 'message' => 'Aucun favoris n\'a été trouvée pour cet utilisateur.'
-            ], 400);
+            ]);
         }
 
         $realFavorites = [];
