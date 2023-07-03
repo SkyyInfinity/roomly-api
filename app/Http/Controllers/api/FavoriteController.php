@@ -52,7 +52,7 @@ class FavoriteController extends Controller
             ["room_id", "=", $room->id]
         ]);
 
-        if(count($already) > 0) {
+        if($already->count() > 0) {
             return response()->json([
                 'message' => 'Cette salle à déjà été ajoutée aux favoris.'
             ], 400);
