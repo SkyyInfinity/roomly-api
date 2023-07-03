@@ -21,7 +21,7 @@ class FavoriteController extends Controller
         if(count($favorites) === 0) {
             return response()->json([
                 'message' => 'Aucun favoris n\'a été trouvée pour cet utilisateur.'
-            ]);
+            ], 400);
         }
 
         $realFavorites = [];
@@ -46,6 +46,17 @@ class FavoriteController extends Controller
     {
         $user = User::findOrFail($request->user_id);
         $room = Room::findOrFail($request->room_id);
+
+        $already = Favorite::all()->where([
+            ["user_id", "=", $user->id],
+            ["room_id", "=", $room->id]
+        ])->firstOrFail();
+
+        if($already) {
+            return response()->json([
+                'message' => 'Cette salle à déjà été ajoutée aux favoris.'
+            ], 400);
+        }
 
         $favorite = Favorite::create([
             'user_id' => $user->id,
