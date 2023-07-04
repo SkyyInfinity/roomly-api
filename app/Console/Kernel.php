@@ -26,7 +26,7 @@ class Kernel extends ConsoleKernel
                 }
                 return;
             }
-        })->everyMinute();
+        })->everyMinute()->sendOutputTo(storage_path('logs/cron.log'));
     }
 
     /**
