@@ -13,6 +13,7 @@ class Reservation extends Model
         'user',
         'room',
         'start_at',
-        'end_at'
+        'end_at',
+        'status'
     ];
 }
