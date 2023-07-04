@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Room;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -15,6 +13,7 @@ class Reservation extends Model
         'user',
         'room',
         'start_at',
-        'end_at'
+        'end_at',
+        'status'
     ];
 }

@@ -36,6 +36,35 @@ class ReservationController extends Controller
     }
 
     /**
+     * Display a listing of the resource by user.
+     */
+    public function getByUser(string|int $id)
+    {
+        $user = User::findOrFail($id);
+        $reservations = Reservation::all()->where('user', $user->id);
+
+        if(count($reservations) === 0) {
+            return response()->json([
+                'message' => 'Aucune réservation n\'a été trouvée.'
+            ]);
+        }
+
+        $realReservations = [];
+
+        foreach($reservations as $reservation) {
+            $user = User::findOrFail($reservation->user);
+            $room = Room::findOrFail($reservation->room);
+
+            $reservation->user = $user;
+            $reservation->room = $room;
+
+            array_push($realReservations, $reservation);
+        }
+
+        return response()->json($realReservations);
+    } 
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(ReservationStoreRequest $request)
@@ -46,9 +75,16 @@ class ReservationController extends Controller
         $reservation = Reservation::create([
             'user' => $user->id,
             'room' => $room->id,
-            'start_at' => $request->start_at,
-            'end_at' => $request->end_at
+            'status' => 'En attente',
+            'start_at' => new \DateTime($request->start_at),
+            'end_at' => new \DateTime($request->end_at)
         ]);
+
+        if($reservation) {
+            $room->update([
+                'is_reserved' => true
+            ]);
+        }
 
         return response()->json([
             'message' => 'La réservation a été créée avec succès.',
@@ -95,13 +131,13 @@ class ReservationController extends Controller
      */
     public function destroy(Request $request, string $id)
     {
-        if(in_array('admin', json_decode($request->user()->roles)) === false) {
-            return response()->json([
-                'message' => 'Vous n\'avez pas les droits pour accéder à cette ressource.'
+        $reservation = Reservation::findOrFail($id);
+        $room = Room::findOrFail($reservation->room);
+        if($reservation) {
+            $room->update([
+                'is_reserved' => false
             ]);
         }
-
-        $reservation = Reservation::findOrFail($id);
         $reservation->delete();
 
         return response()->json([

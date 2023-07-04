@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RoomStoreRequest;
+use App\Models\Favorite;
 use App\Models\Room;
 use Illuminate\Http\Request;
 
@@ -20,6 +21,35 @@ class RoomController extends Controller
             return response()->json([
                 'message' => 'Aucune salle n\'a été trouvée.'
             ]);
+        }
+
+        return response()->json($rooms);
+    }
+
+    /**
+     * Display a listing of the resource with favorites.
+     */
+    public function getAllWithFavorites(string|int $id = null) 
+    {
+        $rooms = Room::all();
+
+        if(count($rooms) === 0) {
+            return response()->json([
+                'message' => 'Aucune salle n\'a été trouvée.'
+            ]);
+        }
+
+        if($id) {
+            $favorites = Favorite::all()->where('user_id', $id);
+
+            foreach($rooms as $room) {
+                foreach($favorites as $favorite) {
+                    if($room->id === $favorite->room_id) {
+                        $room->is_favorite = true;
+                        $room->favorite_id = $favorite->id;
+                    }
+                }
+            }
         }
 
         return response()->json($rooms);

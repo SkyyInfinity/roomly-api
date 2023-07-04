@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Room extends Model
 {
@@ -19,10 +19,16 @@ class Room extends Model
         'description',
         'image',
         'pin',
+        'is_reserved'
     ];
 
     public function users()
     {
         return $this->belongsToMany(User::class)->using(Reservation::class);
+    }
+
+    public function usersThatLiked()
+    {
+         return $this->belongsToMany(User::class)->using(Favorite::class);
     }
 }

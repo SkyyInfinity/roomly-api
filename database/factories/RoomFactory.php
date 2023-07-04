@@ -17,10 +17,10 @@ class RoomFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => 'Salle N°' . fake()->numberBetween(100, 200),
+            'name' => 'Salle ' . fake()->city(),
             'description' => fake()->text(),
-            'image' => fake()->imageUrl(),
-            'pin' => fake()->numberBetween(0, 50),
+            'image' => 'https://wonderful-lamarr.139-99-210-151.plesk.page/images/room.webp',
+            'pin' => fake()->numberBetween(1, 50),
             'is_reserved' => fake()->boolean(0),
         ];
     }
