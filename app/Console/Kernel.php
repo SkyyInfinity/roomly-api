@@ -27,6 +27,7 @@ class Kernel extends ConsoleKernel
                     if (strtotime($reservation->end_at) < strtotime($now)) {
                         // unreserve the room
                         Log::info('Unreserving room '.$reservation->room);
+                        DB::table('reservations')->where('id', $reservation->id)->update(['status' => 'Terminée']);
                         DB::table('rooms')->where('id', $reservation->room)->update(['is_reserved' => false]);
                     }
                     Log::info('No reservations to unreserve');

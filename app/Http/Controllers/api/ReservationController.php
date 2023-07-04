@@ -91,7 +91,7 @@ class ReservationController extends Controller
                 'id' => $reservation->id,
                 'user' => $reservation->user,
                 'room' => $reservation->room,
-                'status' => $reservation->status,
+                'status' => 'En attente',
                 'start_at' => $reservation->start_at,
                 'end_at' => $reservation->end_at
             ]
