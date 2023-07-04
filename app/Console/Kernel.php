@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->call(function () {
+            Log::info('Running cron job');
             $now = strtotime(now('Europe/Paris'));
             // find all reservations
             $reservations = DB::table('reservations')->get();
@@ -23,12 +24,13 @@ class Kernel extends ConsoleKernel
             if($reservations->count() > 0) {
                 foreach ($reservations as $reservation) {
                     // if the reservation is not confirmed and the reservation time is less than 30 minutes away
-                    if (strtotime($reservation->end_at) < $now) {
+                    if ($reservation->end_at < $now) {
                         // unreserve the room
                         Log::info('Unreserving room '.$reservation->room);
-                        DB::table('rooms')->where('id', $reservation->room)->update(['is_reserved' => false]);
+                        return DB::table('rooms')->where('id', $reservation->room)->update(['is_reserved' => false]);
                     }
                     Log::info('No reservations to unreserve');
+                    return;
                 }
             } else {
                 Log::info('No reservations found');
