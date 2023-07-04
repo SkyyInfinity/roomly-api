@@ -75,6 +75,7 @@ class ReservationController extends Controller
         $reservation = Reservation::create([
             'user' => $user->id,
             'room' => $room->id,
+            'status' => 'En attente',
             'start_at' => new \DateTime($request->start_at),
             'end_at' => new \DateTime($request->end_at)
         ]);
@@ -91,7 +92,7 @@ class ReservationController extends Controller
                 'id' => $reservation->id,
                 'user' => $reservation->user,
                 'room' => $reservation->room,
-                'status' => 'En attente',
+                'status' => $reservation->status,
                 'start_at' => $reservation->start_at,
                 'end_at' => $reservation->end_at
             ]
