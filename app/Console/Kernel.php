@@ -15,15 +15,15 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->call(function () {
+            $now = strtotime(now('Europe/Paris'));
             // find all reservations
             $reservations = DB::table('reservations')->get();
             Log::info('Getting all reservations');
             // loop through all reservations
             if($reservations->count() > 0) {
                 foreach ($reservations as $reservation) {
-                    $now = strtotime(now('Europe/Paris'));
                     // if the reservation is not confirmed and the reservation time is less than 30 minutes away
-                    if ($reservation->end_at < $now) {
+                    if (strtotime($reservation->end_at) < $now) {
                         // unreserve the room
                         Log::info('Unreserving room '.$reservation->room);
                         DB::table('rooms')->where('id', $reservation->room)->update(['is_reserved' => false]);
