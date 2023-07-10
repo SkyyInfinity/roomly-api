@@ -14,20 +14,20 @@
         @vite('resources/css/app.css')
     </head>
     <body class="antialiased h-screen grid grid-admin-layout">
-        @section('header')
+        {{-- @section('header')
             @include('admin.partials.header')
-        @show
+        @show --}}
 
-        @section('sidebar')
+        {{-- @section('sidebar')
             @include('admin.partials.sidebar')
-        @show
+        @show --}}
  
         <main id="l-main" class="p-12 h-full">
             @yield('content')
         </main>
 
-        @section('footer')
+        {{-- @section('footer')
             @include('admin.partials.footer')
-        @show
+        @show --}}
     </body>
 </html>
