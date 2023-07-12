@@ -2,14 +2,16 @@
 
 namespace App\Admin\Controllers;
 
-use App\Admin\Forms\AddRoom;
-use App\Admin\Forms\UpdateRoom;
 use App\Models\Room;
-use Encore\Admin\Controllers\AdminController;
+use App\Models\User;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
-use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
+use App\Models\Reservation;
+use App\Admin\Forms\AddRoom;
+use App\Admin\Forms\UpdateRoom;
+use Encore\Admin\Layout\Content;
+use Encore\Admin\Controllers\AdminController;
 
 class ReservationController extends AdminController
 {
@@ -27,27 +29,26 @@ class ReservationController extends AdminController
      */
     protected function gridReservation(Content $content)
     {
-        $grid = new Grid(new Room);
+        $grid = new Grid(new Reservation);
 
         $grid->column('id', __('ID'))->sortable();
-        $grid->column('name', 'Nom');
-        $grid->column('description', 'Description')->style('
-            width: 250px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-        ');
-        $grid->column('image', 'Image')->image();
-        $grid->column('pin', 'Port');
-        $grid->column('is_reserved', 'Réservé ?')->bool();
+        $grid->column('room', 'Salle')->display(function($field) {
+            $field = Room::find($field);
+            return $field->name;
+        });
+        $grid->column('user', 'Utilisateur')->display(function($field) {
+            $field = User::find($field);
+            return $field->first_name . ' ' . $field->last_name;
+        });
+        $grid->column('start_at', 'Date de début')->datetime();
+        $grid->column('end_at', 'Date de fin')->datetime();
+        $grid->column('status', 'Status');
         $grid->column('created_at', 'Créer le')->sortable();
         $grid->column('updated_at', 'Modifier le')->sortable();
 
         return $content
-            ->title('Salles')
-            ->description('La liste des salles de votre établissement.')
+            ->title('Réservations')
+            ->description('La liste des réservations.')
             ->row($grid->render())
         ;
     }
